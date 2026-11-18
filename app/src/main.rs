@@ -21,6 +21,7 @@ mod thesaurus;
 mod update;
 mod vary;
 mod wmf;
+mod wordimport;
 
 use std::path::PathBuf;
 

@@ -1817,7 +1817,7 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 
 [[package]]
 name = "klassenwerk"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "arboard",
  "base64",
@@ -1826,6 +1826,7 @@ dependencies = [
  "eframe",
  "egui",
  "image",
+ "miniz_oxide 0.8.9",
  "rfd",
  "roxmltree",
  "serde",

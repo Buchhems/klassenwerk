@@ -1,5 +1,14 @@
 # Änderungen
 
+## 1.1.0 – 18.11.2026
+
+**Import aus Word**
+- Aufgaben aus Word-Dokumenten (.docx) und RTF übernehmen: Datei → „Aufgaben aus Word / RTF importieren …“ oder die Datei ins Fenster ziehen
+- Aufgaben und Lösungen werden an Zeilen wie „Aufgabe=1“ / „Lösung=1“ (auch „A#1“ / „L#1“) getrennt; in derselben Zeile lassen sich Fach, Schlagwörter, Punkte und Leerzeilen angeben – Dokumente, die für KDWord vorbereitet sind, funktionieren direkt
+- Fett, kursiv, Farben, Aufzählungen, Überschriften, Tabellen, Bilder und Word-Formeln werden übernommen
+- Punkte in Klammern der Lösung, z. B. „(2 Punkte)“, werden zusammengezählt; Leerzeilen am Ende einer Aufgabe werden zu Antwortlinien
+- Vorschau vor dem Übernehmen mit Hinweisen auf fehlende Lösungen, doppelte Nummern und schon vorhandene Aufgaben
+
 ## 1.0.0 – 18.11.2026
 
 Erste Version.

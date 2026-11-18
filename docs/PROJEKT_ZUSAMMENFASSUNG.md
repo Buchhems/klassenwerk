@@ -1,6 +1,6 @@
 # Klassenwerk: Projektzusammenfassung
 
-Stand: Version 1.0.0 (18.11.2026). Diese Seite ist die Grundlage für die Weiterentwicklung: was das Programm kann, wie es aufgebaut ist, wie man es baut und was als Nächstes kommt.
+Stand: Version 1.1.0 (18.11.2026). Diese Seite ist die Grundlage für die Weiterentwicklung: was das Programm kann, wie es aufgebaut ist, wie man es baut und was als Nächstes kommt.
 
 ## 1. Überblick
 
@@ -10,7 +10,7 @@ Klassenwerk ist eine Aufgabendatenbank, ein Klausurplaner und ein Notenbuch für
 |---|---|
 | Technik | Rust (Edition 2021) mit egui/eframe 0.31; Paket `klassenwerk`, Programm `Klassenwerk` |
 | Plattformen | Windows, Linux (x86_64), macOS (Apple Silicon und Intel) |
-| Umfang | ca. 18 300 Zeilen Rust in 25 Dateien, 62 Unit-Tests |
+| Umfang | ca. 20 000 Zeilen Rust in 26 Dateien, 64 Unit-Tests |
 | Lizenz | gemeinfrei, CC0 1.0 (`LICENSE`); mit Claude (Anthropic) entwickelt, kein Urheberanspruch. Fremdpakete: `THIRD_PARTY_LICENSES.txt` |
 | Repository | https://github.com/buchhems/klassenwerk |
 
@@ -40,6 +40,7 @@ Klassenwerk ist eine Aufgabendatenbank, ein Klausurplaner und ein Notenbuch für
 - Druckvorlagen mit Platzhaltern (`{Titel}`, `{Gruppe}`, `{Gesamtpunkte}` …), Schullogo, Notenschlüssel-Tabelle (mit Prozentwerten und Zeile „Anzahl“ auf Wunsch), Notenspiegel mit Durchschnitt und Balkendiagramm
 - Ausgabe als HTML/PDF (über den Browser), **Word (DOCX)** mit bearbeitbaren Word-Formeln, RTF
 - Aufgaben im XML-Format von KlasseDozent importieren und exportieren; Aufgabenpakete `.kwerk`
+- **Import aus Word und RTF:** ein Dokument wird an Markierungen („Aufgabe=1“ / „A#1“, „Lösung=1“ / „L#1“, dazu Fach, Schlagwörter, Punkte, Leerzeilen wie bei KDWord) in Aufgaben geteilt; Formatierung, Listen, Tabellen, Bilder und Word-Formeln werden übernommen, Punkte aus Klammern der Lösung addiert. Vorschau mit Prüfung vor dem Übernehmen. Ohne Markierungen wird das ganze Dokument eine Aufgabe.
 - **Moodle:** Aufgaben oder eine ganze Klausur als Moodle-XML (Freitextfragen mit Punkten, Musterlösung als Feedback, Erwartungshorizont als Bewertungshinweis, Bilder eingebettet, Formeln als TeX)
 - **Austauschordner:** Aufgaben mit Kolleginnen und Kollegen über einen gemeinsamen Ordner (Netzlaufwerk, Cloud, USB-Stick) teilen; beim Holen werden nur fehlende Aufgaben übernommen
 
@@ -99,6 +100,7 @@ Klassenwerk ist eine Aufgabendatenbank, ein Klausurplaner und ein Notenbuch für
 | `export.rs` | Dokumente zusammensetzen (Vorlagen, Platzhalter, Notenschlüssel, Notenspiegel mit Diagramm, Erwartungshorizont) → HTML, RTF |
 | `docx.rs` | Word-Export mit eigenem ZIP-Schreiber |
 | `moodle.rs` | Export als Moodle-XML |
+| `wordimport.rs` | Import aus .docx (eigener Zip-Leser, Word-Formeln → Formelquelltext) und .rtf, Aufteilen an Markierungen |
 | `mcp.rs` | MCP-Server |
 | `vary.rs` | Aufgabenvarianten: Variablen, Zufallswerte je Mappe (`Sheet.seed`), Ausdrücke `{=…}` |
 | `spell.rs` | Rechtschreibprüfung: Hunspell-Wörterbücher lesen, prüfen, Vorschläge; Suche nach installierten Wörterbüchern |
@@ -197,6 +199,7 @@ Einfacher geht es auf GitHub: Actions → „Klassenwerk bauen“ baut alle drei
 - Die Rechtschreibprüfung und der Thesaurus brauchen installierte Wörterbücher (LibreOffice oder unter Linux hunspell-de-de / mythes-de); Klassenwerk bringt keine mit. Beides gibt es nur im Aufgabeneditor. Der Thesaurus findet gebeugte Formen nur über einfache Endungen („Hunden“ → „Hund“, nicht „Häuser“ → „Haus“).
 - Schrift je Aufgabe: Auf dem Bildschirm ändert sich nur die Größe; die Schriftart muss beim Drucken auf dem Rechner installiert sein. Der XML-Export im Format von KlasseDozent lässt sie weg.
 - Verbundene Tabellenzellen: Was nicht rechteckig verbunden ist, wird zum umschließenden Rechteck ergänzt (Text darin entfällt). Im Bildschirm-Editor steht die Tabelle weiter als Text.
+- Word-Import: alte .doc-Dateien vorher als .docx speichern; MathType- und andere OLE-Formeln kommen als Bild (WMF) oder fehlen (EMF); Formeln in RTF-Dateien nur, wenn ein WMF-Ersatzbild darin steht.
 - Moodle: Exportiert werden Freitextfragen (bewertet von Hand); Formeln brauchen in Moodle den MathJax-Filter (Standard). Zufallszahlen erscheinen mit den Beispielwerten.
 - Austauschordner: Es gibt keine Rechte oder Sperren; wer Zugriff auf den Ordner hat, kann Pakete ablegen und löschen.
 - Formeln: Matrizen ohne Spaltenformat (`array{cc}` wird gelesen, aber nicht ausgewertet); `$…$` gilt nur im Aufgabeneditor, nicht in Zusatztexten und Druckvorlagen.

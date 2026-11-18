@@ -1,13 +1,13 @@
 ﻿; Klassenwerk – Windows-Installer (Inno Setup 6, https://jrsoftware.org/isinfo.php)
 ; Bauen:  powershell -File packaging\windows\build-windows.ps1
-; oder:   iscc /DAppVersion=1.0.0 packaging\windows\klassenwerk.iss
+; oder:   iscc /DAppVersion=1.1.0 packaging\windows\klassenwerk.iss
 ;
 ; Installiert ohne Administratorrechte nach %LOCALAPPDATA%\Programs\Klassenwerk
 ; (wahlweise für alle Benutzer). Die Daten in %APPDATA%\Klassenwerk bleiben bei
 ; Update und Deinstallation erhalten.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 #ifndef SourceExe
   #define SourceExe "..\..\app\target\release\Klassenwerk.exe"

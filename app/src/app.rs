@@ -152,6 +152,19 @@ enum Modal {
     Update,
     Restore,
     Exchange,
+    WordImport,
+}
+
+/// A Word or RTF document being imported: the file, the options and what was found.
+pub struct WordImportState {
+    pub path: PathBuf,
+    pub parsed: Result<crate::wordimport::Parsed, String>,
+    pub opt: crate::wordimport::Options,
+    pub found: Vec<crate::wordimport::Found>,
+    pub notes: Vec<String>,
+    /// numbers of the tasks to take over
+    pub take: HashSet<usize>,
+    pub preview: Option<usize>,
 }
 
 /// An opened backup, from which single entries can be taken over.
@@ -249,6 +262,7 @@ pub struct App {
     update_status: String,
     /// opened backup for taking over single entries
     restore: Option<RestoreState>,
+    word_import: Option<WordImportState>,
     /// packages in the exchange folder: (read at, folder, list)
     exchange_list: Option<(f64, String, Vec<misc::ExchangeFile>)>,
     names_paste: String,
@@ -506,6 +520,7 @@ impl App {
             update: None,
             update_status: String::new(),
             restore: None,
+            word_import: None,
             exchange_list: None,
             names_paste: String::new(),
             file_stamp: Database::file_stamp(),
@@ -584,6 +599,14 @@ impl App {
                         tab: 0,
                     });
                     app.modal = Modal::Restore;
+                }
+                "word" => {
+                    if let Ok(p) = std::env::var("KLASSENWERK_WORD") {
+                        app.open_word_import(PathBuf::from(p));
+                        if let Some(st) = &mut app.word_import {
+                            st.preview = Some(1.min(st.found.len().saturating_sub(1)));
+                        }
+                    }
                 }
                 "exchange" => {
                     app.db.settings.exchange_dir = std::env::var("KLASSENWERK_EXCHANGE").unwrap_or_default();
@@ -1494,11 +1517,20 @@ impl App {
 
     fn import_dialog(&mut self) {
         if let Some(files) = rfd::FileDialog::new()
-            .add_filter("Aufgaben (XML, Klassenwerk-Paket)", &["xml", "kwerk", "kldz", "json"])
+            .add_filter("Aufgaben (XML, Klassenwerk-Paket, Word, RTF)", &["xml", "kwerk", "kldz", "json", "docx", "rtf"])
             .set_title("Aufgaben importieren")
             .pick_files()
         {
-            self.import_paths(files);
+            let (word, rest): (Vec<PathBuf>, Vec<PathBuf>) = files.into_iter().partition(|p| {
+                let e = p.extension().map(|e| e.to_string_lossy().to_lowercase()).unwrap_or_default();
+                e == "docx" || e == "rtf"
+            });
+            if !rest.is_empty() {
+                self.import_paths(rest);
+            }
+            if let Some(p) = word.into_iter().next() {
+                self.open_word_import(p);
+            }
         }
     }
 
@@ -1640,6 +1672,20 @@ impl App {
                             ui.close_menu();
                             self.import_dialog();
                         }
+                        if ui
+                            .button("📝  Aufgaben aus Word / RTF importieren …")
+                            .on_hover_text(
+                                "Ein Word- oder RTF-Dokument mit Markierungen wie „Aufgabe=1“ / „Lösung=1“ (auch A#1 / L#1) in einzelne Aufgaben aufteilen",
+                            )
+                            .clicked()
+                        {
+                            ui.close_menu();
+                            if let Some(p) =
+                                rfd::FileDialog::new().add_filter("Word / RTF", &["docx", "rtf"]).set_title("Aufgaben aus Word importieren").pick_file()
+                            {
+                                self.open_word_import(p);
+                            }
+                        }
                         ui.separator();
                         let ids = self.filtered();
                         if ui.button(format!("📦  Angezeigte Aufgaben als Paket exportieren ({}) …", ids.len())).clicked() {
@@ -1750,6 +1796,13 @@ impl eframe::App for App {
                     None => self.toast = Some((format!("{} ist kein lesbares Bild", p.display()), 0.0)),
                 }
             }
+        }
+        let (word, dropped): (Vec<PathBuf>, Vec<PathBuf>) = dropped.into_iter().partition(|p| {
+            let e = p.extension().map(|e| e.to_string_lossy().to_lowercase()).unwrap_or_default();
+            e == "docx" || e == "rtf" || e == "doc"
+        });
+        if let Some(p) = word.into_iter().next() {
+            self.open_word_import(p);
         }
         if !dropped.is_empty() {
             self.import_paths(dropped);

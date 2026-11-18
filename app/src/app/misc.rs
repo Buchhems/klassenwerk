@@ -275,6 +275,10 @@ impl App {
                 self.modal = Modal::Exchange;
                 self.ui_exchange(ctx);
             }
+            Modal::WordImport => {
+                self.modal = Modal::WordImport;
+                self.ui_word_import(ctx);
+            }
         }
     }
 
@@ -1061,6 +1065,210 @@ impl App {
             self.exchange_list = None;
         }
         if !open {
+            self.modal = Modal::None;
+        }
+    }
+
+    pub(crate) fn open_word_import(&mut self, path: PathBuf) {
+        let data = std::fs::read(&path);
+        let ext = path.extension().map(|e| e.to_string_lossy().to_lowercase()).unwrap_or_default();
+        let parsed = data.map_err(|e| e.to_string()).and_then(|d| crate::wordimport::parse_bytes(&d, &ext));
+        let mut st =
+            WordImportState { path, parsed, opt: crate::wordimport::Options::default(), found: vec![], notes: vec![], take: HashSet::new(), preview: None };
+        Self::word_recount(&mut st, &self.db);
+        self.word_import = Some(st);
+        self.modal = Modal::WordImport;
+    }
+
+    /// Cuts the document again with the current options; new tasks are preselected.
+    fn word_recount(st: &mut WordImportState, db: &Database) {
+        if let Ok(p) = &st.parsed {
+            let (found, notes) = crate::wordimport::tasks(p, &st.opt);
+            let keys: HashSet<String> = db.tasks.iter().map(|t| t.dup_key()).collect();
+            st.take = (0..found.len()).filter(|i| !keys.contains(&found[*i].task.dup_key())).collect();
+            st.found = found;
+            st.notes = notes;
+            if st.preview.map(|i| i >= st.found.len()).unwrap_or(true) {
+                st.preview = if st.found.is_empty() { None } else { Some(0) };
+            }
+        }
+    }
+
+    fn ui_word_import(&mut self, ctx: &egui::Context) {
+        let Some(st) = &mut self.word_import else {
+            self.modal = Modal::None;
+            return;
+        };
+        let mut open = true;
+        let (mut changed, mut take, mut close) = (false, false, false);
+        let subjects: Vec<String> = {
+            let mut v: Vec<String> = self.db.tasks.iter().map(|t| t.subject.clone()).filter(|s| !s.is_empty()).collect();
+            v.sort();
+            v.dedup();
+            v
+        };
+        let keys: HashSet<String> = self.db.tasks.iter().map(|t| t.dup_key()).collect();
+        let size = egui::vec2(980.0_f32.min(ctx.screen_rect().width() - 40.0), 660.0_f32.min(ctx.screen_rect().height() - 60.0));
+        let cache = &mut self.cache;
+        let view_size = self.db.settings.view_size;
+        egui::Window::new("Aufgaben aus Word importieren")
+            .open(&mut open)
+            .collapsible(false)
+            .resizable(false)
+            .fixed_size(size)
+            .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
+            .show(ctx, |ui| {
+                ui.label(RichText::new(st.path.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default()).strong());
+                if let Err(e) = &st.parsed {
+                    ui.colored_label(WARN, e);
+                    if ui.button("Schließen").clicked() {
+                        close = true;
+                    }
+                    return;
+                }
+                ui.label(
+                    RichText::new("Aufgaben werden an Zeilen wie „Aufgabe=1“ oder „A#1“ getrennt, Lösungen an „Lösung=1“ oder „L#1“. In derselben Zeile sind möglich: Fach=, Schlagwort1=, Schlagwort2= (oder F#, S1#, S2#), Punkte= / P#, Z# (Leerzeilen), ZU# (unterstrichen). Mehrere Wörter mit _ verbinden.")
+                        .small()
+                        .weak(),
+                );
+                egui::Grid::new("wi_opt").num_columns(2).show(ui, |ui| {
+                    ui.label("Fach, wenn keins angegeben");
+                    ui.horizontal(|ui| {
+                        changed |= ui.add(egui::TextEdit::singleline(&mut st.opt.subject).desired_width(160.0)).changed();
+                        egui::ComboBox::from_id_salt("wi_subj").selected_text("…").width(30.0).show_ui(ui, |ui| {
+                            for s in &subjects {
+                                if ui.selectable_label(false, s).clicked() {
+                                    st.opt.subject = s.clone();
+                                    changed = true;
+                                }
+                            }
+                        });
+                        ui.label("Schlagwort 1");
+                        changed |= ui.add(egui::TextEdit::singleline(&mut st.opt.topic).desired_width(160.0)).changed();
+                    });
+                    ui.end_row();
+                    ui.label("");
+                    ui.horizontal_wrapped(|ui| {
+                        changed |= ui.checkbox(&mut st.opt.count_blank, "Leerzeilen am Aufgabenende als Antwortlinien").changed();
+                        ui.add_enabled_ui(st.opt.count_blank, |ui| {
+                            changed |= ui.checkbox(&mut st.opt.underline, "unterstreichen").changed();
+                        });
+                        changed |= ui.checkbox(&mut st.opt.points_from_solution, "Punkte aus Klammern der Lösung, z. B. „(2 P.)“").changed();
+                        changed |= ui.checkbox(&mut st.opt.need_solution, "Lösung ist Pflicht").changed();
+                    });
+                    ui.end_row();
+                });
+                ui.separator();
+                ui.columns(2, |cols| {
+                    let ui = &mut cols[0];
+                    ui.horizontal(|ui| {
+                        ui.label(RichText::new(format!("Gefunden: {}", count(st.found.len(), "Aufgabe", "Aufgaben"))).strong());
+                        if ui.small_button("alle").clicked() {
+                            st.take = (0..st.found.len()).collect();
+                        }
+                        if ui.small_button("keine").clicked() {
+                            st.take.clear();
+                        }
+                    });
+                    egui::ScrollArea::vertical().id_salt("wi_list").max_height(330.0).auto_shrink([false, true]).show(ui, |ui| {
+                        for (i, f) in st.found.iter().enumerate() {
+                            let t = &f.task;
+                            ui.horizontal(|ui| {
+                                let mut on = st.take.contains(&i);
+                                if ui.checkbox(&mut on, "").changed() {
+                                    if on {
+                                        st.take.insert(i);
+                                    } else {
+                                        st.take.remove(&i);
+                                    }
+                                }
+                                let sel = st.preview == Some(i);
+                                let label = format!("{}. {}", f.nr, t.title());
+                                if ui.selectable_label(sel, RichText::new(label).strong()).clicked() {
+                                    st.preview = Some(i);
+                                }
+                            });
+                            let mut info = vec![if t.subject.is_empty() { "ohne Fach".to_string() } else { t.subject.clone() }];
+                            if !t.topic.is_empty() {
+                                info.push(t.topic.clone());
+                            }
+                            info.push(format!("{} P.", t.points));
+                            if t.answer_lines > 0 {
+                                info.push(format!("{} Leerzeilen{}", t.answer_lines, if t.underline_answer { " (unterstrichen)" } else { "" }));
+                            }
+                            if t.solution.text.trim().is_empty() {
+                                info.push("ohne Lösung".into());
+                            }
+                            if keys.contains(&t.dup_key()) {
+                                info.push("schon vorhanden".into());
+                            }
+                            ui.label(RichText::new(format!("      {}", info.join(" · "))).small().weak());
+                        }
+                    });
+                    if !st.notes.is_empty() {
+                        ui.add_space(4.0);
+                        for n in &st.notes {
+                            ui.label(RichText::new(format!("⚠ {n}")).small().color(WARN));
+                        }
+                    }
+                    let ui = &mut cols[1];
+                    if let Some(f) = st.preview.and_then(|i| st.found.get(i)) {
+                        egui::ScrollArea::vertical().id_salt("wi_prev").max_height(420.0).auto_shrink([false, true]).show(ui, |ui| {
+                            ui.label(RichText::new("Aufgabe").small().weak());
+                            paper(ui, |ui| {
+                                ui.set_width(ui.available_width());
+                                crate::markup::View { doc: &f.task.task, cache: &mut *cache, size: view_size, zoom: 1.0 }.show(ui);
+                            });
+                            if !f.task.solution.text.trim().is_empty() {
+                                ui.label(RichText::new("Lösung").small().weak());
+                                paper(ui, |ui| {
+                                    ui.set_width(ui.available_width());
+                                    crate::markup::View { doc: &f.task.solution, cache: &mut *cache, size: view_size, zoom: 1.0 }.show(ui);
+                                });
+                            }
+                        });
+                    }
+                });
+                ui.separator();
+                ui.horizontal(|ui| {
+                    let n = st.take.len();
+                    if ui.add_enabled(n > 0, egui::Button::new(RichText::new(format!("{} übernehmen", count(n, "Aufgabe", "Aufgaben"))).color(Color32::WHITE)).fill(ACCENT)).clicked() {
+                        take = true;
+                    }
+                    if ui.button("Abbrechen").clicked() {
+                        close = true;
+                    }
+                });
+            });
+        if changed {
+            if let Some(st) = &mut self.word_import {
+                Self::word_recount(st, &self.db);
+            }
+        }
+        if take {
+            let st = self.word_import.take().unwrap();
+            let mut n = 0;
+            let mut ids = Vec::new();
+            for i in 0..st.found.len() {
+                if st.take.contains(&i) {
+                    let mut t = st.found[i].task.clone();
+                    t.id = self.db.new_id();
+                    ids.push(t.id);
+                    self.db.tasks.push(t);
+                    n += 1;
+                }
+            }
+            self.cache = ObjCache::default();
+            self.changed();
+            if let Some(id) = ids.first() {
+                self.selected = Some(*id);
+            }
+            self.toast(format!("{} aus Word übernommen.", count(n, "Aufgabe", "Aufgaben")));
+            self.modal = Modal::None;
+            return;
+        }
+        if !open || close {
+            self.word_import = None;
             self.modal = Modal::None;
         }
     }

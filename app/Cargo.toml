@@ -1,6 +1,6 @@
 [package]
 name = "klassenwerk"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 description = "Klassenwerk – Aufgabendatenbank, Klausurplaner und Notenbuch für Lehrkräfte"
 license = "CC0-1.0"
@@ -22,6 +22,8 @@ rfd = "0.15"
 # pictures from the clipboard (same version egui already uses)
 arboard = { version = "3.4", default-features = false, features = ["image-data"] }
 chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+# reading Word files (.docx are zip archives); already used by the png decoder
+miniz_oxide = "0.8"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 winit = "0.30"

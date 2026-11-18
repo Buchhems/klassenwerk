@@ -1387,3 +1387,119 @@ fn merged_tables_in_word_and_rtf() {
         let _ = std::fs::write(format!("{dir}/tabelle.html"), crate::export::to_html(&db, &c, false));
     }
 }
+
+#[test]
+fn word_import_markers() {
+    use crate::wordimport::{bracket_points, marker};
+    let m = marker("Aufgabe=3  Fach=Physik schlagwort1=Mechanik Swort2=gleichförmige_Bewegung P#4 ZU#5").unwrap();
+    assert_eq!((m.nr, m.solution), (3, false));
+    assert_eq!(m.subject.as_deref(), Some("Physik"));
+    assert_eq!(m.topic.as_deref(), Some("Mechanik"));
+    assert_eq!(m.subtopic.as_deref(), Some("gleichförmige Bewegung"));
+    assert_eq!(m.points, Some(4));
+    assert_eq!(m.lines, Some((5, true)));
+    let l = marker("L#12").unwrap();
+    assert_eq!((l.nr, l.solution), (12, true));
+    assert_eq!(marker("lösung=  2").unwrap().nr, 2);
+    assert!(marker("Aufgabe 3").is_none());
+    assert!(marker("Die Aufgabe=3 ist leicht").is_none());
+    let r = marker("A#1 Berechne x.").unwrap();
+    assert_eq!(r.rest, "Berechne x.");
+    assert_eq!(bracket_points("a (2 Punkte) b (3 P.) c (1)"), Some(6));
+    assert_eq!(bracket_points("(0,5) (Punkte 11) x(2)"), None);
+    assert_eq!(bracket_points("Zahl (12p)"), Some(12));
+}
+
+#[test]
+fn word_import_docx_and_rtf() {
+    let w = r#"<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>
+<w:p><w:r><w:t>Vorwort</w:t></w:r></w:p>
+<w:p><w:r><w:t>Aufgabe=1 Fach=Mathematik P#5</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve">Berechne </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>genau</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r><m:oMath><m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:den><m:sSup><m:e><m:r><m:t>x</m:t></m:r></m:e><m:sup><m:r><m:t>2</m:t></m:r></m:sup></m:sSup></m:den></m:f></m:oMath></w:p>
+<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr><w:r><w:t>Punkt</w:t></w:r></w:p>
+<w:tbl><w:tblPr><w:tblStyle w:val="TableGrid"/></w:tblPr><w:tr><w:tc><w:p><w:r><w:t>a</w:t></w:r></w:p></w:tc><w:tc><w:p><w:r><w:t>b|c</w:t></w:r></w:p></w:tc></w:tr></w:tbl>
+<w:p><w:r><w:drawing><wp:inline xmlns:wp="x"><wp:extent cx="952500" cy="476250"/><a:graphic xmlns:a="y"><a:blip r:embed="rId9"/></a:graphic></wp:inline></w:drawing></w:r></w:p>
+<w:p/><w:p/><w:p/>
+<w:p><w:r><w:t>L#1</w:t></w:r></w:p>
+<w:p><w:r><w:t>Ergebnis (2 Punkte)</w:t></w:r></w:p>
+<w:p><w:r><w:t>A#2</w:t></w:r></w:p>
+<w:p><w:r><w:t>Zweite Aufgabe</w:t></w:r></w:p>
+<w:p><w:r><w:t>Lösung=2</w:t></w:r></w:p>
+<w:p><w:r><w:t>Antwort (3 P.) und (1 P.)</w:t></w:r></w:p>
+</w:body></w:document>"#;
+    let mut png = Vec::new();
+    image::RgbImage::from_pixel(4, 4, image::Rgb([0, 90, 200])).write_to(&mut std::io::Cursor::new(&mut png), image::ImageFormat::Png).unwrap();
+    let rels = r#"<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId9" Type="image" Target="media/image1.png"/></Relationships>"#;
+    let zip = crate::docx::zip_store(&[
+        ("word/document.xml".to_string(), w.as_bytes().to_vec()),
+        ("word/_rels/document.xml.rels".to_string(), rels.as_bytes().to_vec()),
+        ("word/media/image1.png".to_string(), png),
+    ]);
+    let parsed = crate::wordimport::parse_bytes(&zip, "docx").unwrap();
+    let (found, notes) = crate::wordimport::tasks(&parsed, &crate::wordimport::Options { subject: "Physik".into(), ..Default::default() });
+    assert_eq!(found.len(), 2, "{notes:?}");
+    let t = &found[0].task;
+    assert_eq!(t.subject, "Mathematik");
+    assert_eq!(t.points, 5, "marker wins over the solution's brackets");
+    assert_eq!(t.answer_lines, 3);
+    assert!(t.task.text.starts_with("Berechne **genau** {{1}}"), "{}", t.task.text);
+    assert!(t.task.text.contains("\n• Punkt\n"));
+    assert!(t.task.text.contains("+| a | b\\|c |"));
+    assert!(t.task.text.contains("{{2}}"));
+    assert_eq!(t.task.objects.len(), 2);
+    assert_eq!(String::from_utf8_lossy(&t.task.objects[0].data), "\\frac{1}{{x}^{2}}");
+    assert_eq!(t.task.objects[1].width, 100.0);
+    assert!(notes.iter().any(|n| n.contains("vor der ersten Markierung")));
+    let t2 = &found[1].task;
+    assert_eq!(t2.subject, "Physik", "default subject");
+    assert_eq!(t2.points, 4, "brackets in the solution added up");
+    // the formula reads back as a formula
+    let d = crate::math::layout(&String::from_utf8_lossy(&t.task.objects[0].data));
+    assert!(d.ext.y > 0.0);
+
+    // RTF
+    let rtf = br"{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1 Symbol;}}{\colortbl;\red255\green0\blue0;}
+\pard A#1 F#Chemie\par
+\pard Die \b Reaktion\b0  von \cf1 CH\sub 4\nosupersub\cf0 : \u8594?\'fc \f1 a\f0\par
+\trowd\clbrdrt\clbrdrb\cellx2000\cellx4000\pard\intbl x\cell y\cell\row
+\pard\par\pard\par
+\pard L#1\par\pard (3 Punkte)\par}";
+    let parsed = crate::wordimport::parse_bytes(rtf, "rtf").unwrap();
+    let (found, _) = crate::wordimport::tasks(&parsed, &Default::default());
+    assert_eq!(found.len(), 1);
+    let t = &found[0].task;
+    assert_eq!(t.subject, "Chemie");
+    assert_eq!(t.points, 3);
+    assert!(t.task.text.contains("**Reaktion**"), "{}", t.task.text);
+    assert!(t.task.text.contains("_{4}"));
+    assert!(t.task.text.contains("→ü α"), "{}", t.task.text);
+    assert!(t.task.text.contains("+| x | y |"));
+    assert_eq!(t.answer_lines, 2);
+    if let Ok(p) = std::env::var("KLASSENWERK_WORD_TEST") {
+        for f in p.split(';') {
+            let data = std::fs::read(f).unwrap();
+            let parsed = crate::wordimport::parse_bytes(&data, f.rsplit('.').next().unwrap()).unwrap();
+            let (found, notes) = crate::wordimport::tasks(&parsed, &Default::default());
+            println!("== {f}: {} Aufgaben, Hinweise {notes:?}", found.len());
+            for x in &found {
+                println!(
+                    "-- {} [{} / {} / {}] {} P., {} Zeilen\n{}\n.. Lösung:\n{}\n.. Objekte: {:?}",
+                    x.nr,
+                    x.task.subject,
+                    x.task.topic,
+                    x.task.subtopic,
+                    x.task.points,
+                    x.task.answer_lines,
+                    x.task.task.text,
+                    x.task.solution.text,
+                    x.task
+                        .task
+                        .objects
+                        .iter()
+                        .map(|o| (o.kind.clone(), String::from_utf8_lossy(&o.data[..o.data.len().min(40)]).to_string()))
+                        .collect::<Vec<_>>()
+                );
+            }
+        }
+    }
+}
