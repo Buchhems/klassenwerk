@@ -1,0 +1,3 @@
+# Formatierung: cargo fmt (wird im Bauauftrag geprüft)
+max_width = 160
+use_small_heuristics = "Max"

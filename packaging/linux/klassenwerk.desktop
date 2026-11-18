@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Klassenwerk
+GenericName=Aufgaben & Klausuren
+Comment=Aufgabendatenbank, Klausurplaner und Notenbuch für Lehrkräfte
+Exec=klassenwerk
+Icon=klassenwerk
+Terminal=false
+Categories=Education;Office;
+Keywords=Klausur;Aufgaben;Noten;Schule;Lehrer;
+StartupWMClass=klassenwerk

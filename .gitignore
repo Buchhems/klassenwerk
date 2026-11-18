@@ -1,0 +1,15 @@
+# Build-Ausgabe
+/app/target/
+# Archiv (Agenten-Verlauf, alte Screenshots, Original-Exporte)
+/_archiv/
+# Editor/OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# fertige Pakete
+/dist/
+
+# lokale Build-Einstellungen (enthalten Pfade des eigenen Rechners)
+/app/.cargo/

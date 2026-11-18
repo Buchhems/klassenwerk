@@ -1,0 +1,16 @@
+Klassenwerk für Linux (x86_64)
+==============================
+
+Installieren:   ./install.sh        (installiert für Ihren Benutzer, ohne Root)
+Direkt starten: ./klassenwerk
+Entfernen:      ./uninstall.sh
+
+Voraussetzungen: eine grafische Oberfläche (X11 oder Wayland) mit OpenGL – auf jedem
+üblichen Desktop-Linux vorhanden. Mindestversion: siehe SYSTEM.txt in diesem Paket.
+Für die Dateidialoge wird das XDG-Desktop-Portal genutzt (bei GNOME und KDE vorhanden).
+Schöne Schriften: Pakete "fonts-liberation" und "fonts-dejavu" (meist vorinstalliert).
+
+Ihre Daten liegen in ~/.local/share/Klassenwerk/datenbank.json.
+
+KI-Assistent (MCP): Befehl "klassenwerk", Argument "--mcp"; Einrichtung auch in
+Klassenwerk unter Einstellungen → KI-Assistent.

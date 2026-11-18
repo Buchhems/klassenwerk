@@ -1,0 +1,33 @@
+// Windows-Ressourcen von Klassenwerk: Programmsymbol und Versionsangaben.
+// Nach einer Versionsänderung neu erzeugen: sh packaging/windows/make-resources.sh
+#pragma code_page(65001)
+
+1 ICON "klassenwerk.ico"
+
+1 VERSIONINFO
+FILEVERSION     @V1@,@V2@,@V3@,0
+PRODUCTVERSION  @V1@,@V2@,@V3@,0
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          0x40004L
+FILETYPE        0x1L
+FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040704b0"
+        BEGIN
+            VALUE "CompanyName",      "Klassenwerk"
+            VALUE "FileDescription",  "Klassenwerk – Aufgaben, Klausuren & Noten"
+            VALUE "FileVersion",      "@VERSION@"
+            VALUE "InternalName",     "Klassenwerk"
+            VALUE "OriginalFilename", "Klassenwerk.exe"
+            VALUE "ProductName",      "Klassenwerk"
+            VALUE "ProductVersion",   "@VERSION@"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0407, 1200
+    END
+END

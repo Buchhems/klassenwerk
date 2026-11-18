@@ -1,0 +1,585 @@
+[
+ {
+  "fach": "Chemie",
+  "schlagwort1": "Stöchiometrie",
+  "schlagwort2": "Molare Masse von Wasser",
+  "aufgabe": "Berechnen Sie die molare Masse von Wasser $\\text{H}_2\\text{O}$.\nVerwenden Sie $M(\\text{H}) = 1,0\\,\\text{g/mol}$ und $M(\\text{O}) = 16,0\\,\\text{g/mol}$.",
+  "loesung": "$M(\\text{H}_2\\text{O}) = 2 \\cdot 1,0 + 16,0 = 18,0\\,\\text{g/mol}$",
+  "punkte": 2,
+  "schwierigkeit": "leicht",
+  "minuten": 4,
+  "leerzeilen": 3
+ },
+ {
+  "fach": "Chemie",
+  "schlagwort1": "Stöchiometrie",
+  "schlagwort2": "Stoffmenge aus der Masse",
+  "aufgabe": "Eine Probe Kochsalz (NaCl, $M = 58,4\\,\\text{g/mol}$) wiegt {=m} g.\n\n| a) | Berechnen Sie die Stoffmenge. | 2 P. |\n| b) | Wie viele Formeleinheiten enthält die Probe? | 2 P. |",
+  "loesung": "a) $n = \\frac{m}{M} = \\frac{{=m}\\,\\text{g}}{58,4\\,\\text{g/mol}} \\approx {=m/58.4;3}\\,\\text{mol}$\nb) $N = n \\cdot N_A \\approx {=m/58.4*6.022;3} \\cdot 10^{23}$",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "n = m/M richtig eingesetzt, Einheit mol"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 2,
+    "erwartung": "Avogadro-Konstante verwendet, Zehnerpotenz richtig"
+   }
+  ],
+  "punkte": 4,
+  "zufallszahlen": [
+   {
+    "name": "m",
+    "von": 5,
+    "bis": 50,
+    "schritt": 5
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 8
+ },
+ {
+  "fach": "Chemie",
+  "schlagwort1": "Reaktionsgleichungen",
+  "schlagwort2": "Verbrennung von Methan",
+  "aufgabe": "Stellen Sie die Reaktionsgleichung für die vollständige Verbrennung von Methan ($\\text{CH}_4$) auf und gleichen Sie sie aus.",
+  "loesung": "$\\text{CH}_4 + 2\\,\\text{O}_2 \\rightarrow \\text{CO}_2 + 2\\,\\text{H}_2\\text{O}$",
+  "punkte": 3,
+  "schwierigkeit": "leicht",
+  "minuten": 5,
+  "leerzeilen": 3
+ },
+ {
+  "fach": "Chemie",
+  "schlagwort1": "Bindungsarten",
+  "schlagwort2": "Polare Bindungen",
+  "aufgabe": "Kreuzen Sie alle Moleküle an, die ein Dipol sind.\n\n[ ] $\\text{H}_2\\text{O}$\n[ ] $\\text{CO}_2$\n[ ] $\\text{NH}_3$\n[ ] $\\text{CH}_4$\n\nBegründen Sie Ihre Wahl für ein Molekül.",
+  "loesung": "Dipole: $\\text{H}_2\\text{O}$ und $\\text{NH}_3$ (gewinkelt bzw. pyramidal, die Ladungsschwerpunkte fallen nicht zusammen). $\\text{CO}_2$ und $\\text{CH}_4$ sind trotz polarer Bindungen symmetrisch gebaut.",
+  "punkte": 4,
+  "schwierigkeit": "mittel",
+  "minuten": 6,
+  "leerzeilen": 4
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Stammfunktionen",
+  "aufgabe": "Bestimmen Sie eine Stammfunktion.\n\n| a) | $f(x) = 3x^2 - 4x + 1$ | 2 P. |\n| b) | $g(x) = \\frac{1}{2}x^3 + \\sqrt{x}$ | 2 P. |\n| c) | $h(x) = 2\\cos(x) - e^x$ | 2 P. |",
+  "loesung": "a) $F(x) = x^3 - 2x^2 + x$\nb) $G(x) = \\frac{1}{8}x^4 + \\frac{2}{3}x^{\\frac{3}{2}}$\nc) $H(x) = 2\\sin(x) - e^x$",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Potenzregel"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 2,
+    "erwartung": "Wurzel als Potenz geschrieben"
+   },
+   {
+    "bezeichnung": "c",
+    "punkte": 2,
+    "erwartung": "Stammfunktionen von cos und e^x"
+   }
+  ],
+  "punkte": 6,
+  "schwierigkeit": "leicht",
+  "minuten": 10
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Fläche unter einer Parabel",
+  "aufgabe": "Gegeben ist $f(x) = -x^2 + {=a}x$.\n\n| a) | Bestimmen Sie die Nullstellen von f. | 2 P. |\n| b) | Berechnen Sie den Inhalt der Fläche, die der Graph mit der x-Achse einschließt. | 6 P. |",
+  "loesung": "a) $x_1 = 0$, $x_2 = {=a}$\nb) $A = \\int_{0}^{{=a}} (-x^2 + {=a}x)\\,dx = \\left[ -\\frac{1}{3}x^3 + \\frac{{=a}}{2}x^2 \\right]_{0}^{{=a}} = {=a^3/6;2}$ FE",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Ausklammern, beide Nullstellen"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 6,
+    "erwartung": "Integralgrenzen aus a), Stammfunktion, Ergebnis"
+   }
+  ],
+  "punkte": 8,
+  "zufallszahlen": [
+   {
+    "name": "a",
+    "von": 2,
+    "bis": 6,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 15
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Fläche zwischen zwei Graphen",
+  "aufgabe": "Gegeben sind $f(x) = x^2$ und $g(x) = 2x + 3$.\n\n| a) | Berechnen Sie die Schnittstellen der Graphen. | 3 P. |\n| b) | Berechnen Sie den Inhalt der Fläche zwischen den Graphen. | 7 P. |",
+  "loesung": "a) $x^2 = 2x + 3 \\Leftrightarrow x^2 - 2x - 3 = 0 \\Rightarrow x_1 = -1,\\; x_2 = 3$\nb) $A = \\int_{-1}^{3} (2x + 3 - x^2)\\,dx = \\left[ x^2 + 3x - \\frac{1}{3}x^3 \\right]_{-1}^{3} = \\frac{32}{3} \\approx 10,67$ FE",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 3,
+    "erwartung": "Gleichsetzen, quadratische Gleichung gelöst"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 7,
+    "erwartung": "Differenzfunktion, Grenzen, Stammfunktion, Ergebnis"
+   }
+  ],
+  "punkte": 10,
+  "schwierigkeit": "mittel",
+  "minuten": 20
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Stammfunktion prüfen",
+  "aufgabe": "Zeigen Sie durch Ableiten, dass $F(x) = x \\cdot e^x - e^x$ eine Stammfunktion von $f(x) = x \\cdot e^x$ ist.",
+  "loesung": "$F'(x) = e^x + x e^x - e^x = x e^x = f(x)$ (Produktregel)",
+  "punkte": 6,
+  "schwierigkeit": "mittel",
+  "minuten": 8,
+  "leerzeilen": 6
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Fläche unter einer Kurve",
+  "aufgabe": "Berechnen Sie den Inhalt der Fläche zwischen dem Graphen von $f(x) = \\frac{1}{x}$, der x-Achse und den Geraden $x = 1$ und $x = {=b}$.",
+  "loesung": "$A = \\int_{1}^{{=b}} \\frac{1}{x}\\,dx = \\ln({=b}) - \\ln(1) \\approx {=ln(b);3}$ FE",
+  "punkte": 8,
+  "zufallszahlen": [
+   {
+    "name": "b",
+    "von": 2,
+    "bis": 9,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 10,
+  "leerzeilen": 6
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Eingeschlossene Fläche",
+  "aufgabe": "Die Graphen von $f(x) = x^3$ und $g(x) = x$ schließen zwei Flächenstücke ein.\n\n| a) | Bestimmen Sie die Schnittstellen. | 3 P. |\n| b) | Berechnen Sie den Gesamtinhalt beider Flächenstücke. | 7 P. |",
+  "loesung": "a) $x^3 = x \\Rightarrow x \\in \\{-1;\\,0;\\,1\\}$\nb) $A = 2 \\cdot \\int_{0}^{1} (x - x^3)\\,dx = 2 \\cdot \\frac{1}{4} = \\frac{1}{2}$ FE (Symmetrie)",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 3,
+    "erwartung": "drei Schnittstellen"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 7,
+    "erwartung": "Teilflächen getrennt oder Symmetrie begründet"
+   }
+  ],
+  "punkte": 10,
+  "schwierigkeit": "schwer",
+  "minuten": 20
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Integral",
+  "schlagwort2": "Integral mit Parameter",
+  "aufgabe": "Für welchen Wert von $k > 0$ gilt $\\int_{0}^{k} 2x\\,dx = {=c}$?",
+  "loesung": "$\\int_{0}^{k} 2x\\,dx = k^2 = {=c} \\Rightarrow k = {=sqrt(c);3}$",
+  "punkte": 7,
+  "zufallszahlen": [
+   {
+    "name": "c",
+    "von": 4,
+    "bis": 49,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 8,
+  "leerzeilen": 5
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Analysis",
+  "schlagwort2": "Kurvendiskussion",
+  "aufgabe": "Gegeben ist die Funktion $f(x) = x^3 - 3x^2$.\n\n| a) | Bestimmen Sie die Nullstellen. | 2 P. |\n| b) | Bestimmen Sie Hoch- und Tiefpunkt. | 5 P. |\n| c) | Bestimmen Sie den Wendepunkt. | 3 P. |\n| d) | Skizzieren Sie den Graphen im Intervall $[-1;\\,4]$. | 2 P. |",
+  "loesung": "a) $x_1 = 0$ (doppelt), $x_2 = 3$\nb) $f'(x) = 3x^2 - 6x = 0 \\Rightarrow x = 0$ oder $x = 2$; $f''(0) = -6 < 0$: Hochpunkt $H(0|0)$; $f''(2) = 6 > 0$: Tiefpunkt $T(2|-4)$\nc) $f''(x) = 6x - 6 = 0 \\Rightarrow W(1|-2)$\nd) Skizze mit den Punkten aus a) bis c)",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Ausklammern"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 5,
+    "erwartung": "notwendige und hinreichende Bedingung"
+   },
+   {
+    "bezeichnung": "c",
+    "punkte": 3,
+    "erwartung": "f'' = 0 und Vorzeichenwechsel oder f''' ≠ 0"
+   },
+   {
+    "bezeichnung": "d",
+    "punkte": 2,
+    "erwartung": "Punkte richtig eingetragen"
+   }
+  ],
+  "punkte": 12,
+  "schwierigkeit": "mittel",
+  "minuten": 25,
+  "tags": [
+   "Wiederholung"
+  ]
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Lineare Gleichungssysteme",
+  "schlagwort2": "Gleichungssystem mit Matrix",
+  "aufgabe": "Lösen Sie das Gleichungssystem.\n\n$\\begin{aligned} 2x + y &= {=2*p+q} \\\\ x - y &= {=p-q} \\end{aligned}$\n\nSchreiben Sie es zuerst in Matrixform $A \\cdot \\vec{x} = \\vec{b}$.",
+  "loesung": "$\\begin{pmatrix} 2 & 1 \\\\ 1 & -1 \\end{pmatrix} \\cdot \\begin{pmatrix} x \\\\ y \\end{pmatrix} = \\begin{pmatrix} {=2*p+q} \\\\ {=p-q} \\end{pmatrix}$\nAddition der Gleichungen: $3x = {=3*p}$, also $x = {=p}$ und $y = {=q}$.",
+  "punkte": 6,
+  "zufallszahlen": [
+   {
+    "name": "p",
+    "von": 1,
+    "bis": 6,
+    "schritt": 1
+   },
+   {
+    "name": "q",
+    "von": -3,
+    "bis": 5,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 10,
+  "leerzeilen": 6
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Geometrie",
+  "schlagwort2": "Satz des Pythagoras",
+  "aufgabe": "Eine Leiter ist {=l} m lang. Ihr Fuß steht {=d} m von der Hauswand entfernt.\nIn welcher Höhe lehnt die Leiter an der Wand?",
+  "loesung": "$h = \\sqrt{{=l}^2 - {=d}^2} \\approx {=sqrt(l^2-d^2);2}\\,\\text{m}$",
+  "punkte": 4,
+  "zufallszahlen": [
+   {
+    "name": "l",
+    "von": 4,
+    "bis": 8,
+    "schritt": 0.5
+   },
+   {
+    "name": "d",
+    "von": 1,
+    "bis": 2.5,
+    "schritt": 0.5
+   }
+  ],
+  "schwierigkeit": "leicht",
+  "minuten": 6,
+  "leerzeilen": 4
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Stochastik",
+  "schlagwort2": "Zweimal würfeln",
+  "aufgabe": "Ein fairer Würfel wird zweimal geworfen.\n\n| a) | Wie groß ist die Wahrscheinlichkeit für zwei Sechsen? | 2 P. |\n| b) | Wie groß ist die Wahrscheinlichkeit, dass die Augensumme 7 ist? | 2 P. |\n| c) | Wie groß ist die Wahrscheinlichkeit für mindestens eine Sechs? | 2 P. |",
+  "loesung": "a) $P = \\frac{1}{6} \\cdot \\frac{1}{6} = \\frac{1}{36}$\nb) 6 günstige von 36 Ergebnissen: $P = \\frac{6}{36} = \\frac{1}{6}$\nc) Gegenereignis: $P = 1 - \\left(\\frac{5}{6}\\right)^2 = \\frac{11}{36}$",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Pfadregel"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 2,
+    "erwartung": "günstige Ergebnisse gezählt"
+   },
+   {
+    "bezeichnung": "c",
+    "punkte": 2,
+    "erwartung": "Gegenereignis"
+   }
+  ],
+  "punkte": 6,
+  "schwierigkeit": "leicht",
+  "minuten": 10
+ },
+ {
+  "fach": "Mathematik",
+  "schlagwort1": "Funktionen",
+  "schlagwort2": "Betragsfunktion",
+  "aufgabe": "Schreiben Sie $f(x) = |x - 2|$ ohne Betragsstriche als abschnittsweise definierte Funktion.",
+  "loesung": "$f(x) = \\begin{cases} x - 2 & \\text{für } x \\ge 2 \\\\ 2 - x & \\text{für } x < 2 \\end{cases}$",
+  "punkte": 3,
+  "schwierigkeit": "leicht",
+  "minuten": 5,
+  "leerzeilen": 3
+ },
+ {
+  "fach": "Physik",
+  "schlagwort1": "Kinematik",
+  "schlagwort2": "Gleichförmige Bewegung",
+  "aufgabe": "Ein Radfahrer fährt mit konstant {=v} km/h.\n\n| a) | Welche Strecke legt er in {=t} Minuten zurück? | 2 P. |\n| b) | Wie lange braucht er für 30 km? | 2 P. |",
+  "loesung": "a) $s = v \\cdot t = {=v}\\,\\frac{\\text{km}}{\\text{h}} \\cdot \\frac{{=t}}{60}\\,\\text{h} = {=v*t/60;2}\\,\\text{km}$\nb) $t = \\frac{s}{v} = \\frac{30}{{=v}}\\,\\text{h} \\approx {=30/v*60;1}\\,\\text{min}$",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Minuten in Stunden umgerechnet"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 2,
+    "erwartung": "Formel umgestellt, sinnvolle Einheit"
+   }
+  ],
+  "punkte": 4,
+  "zufallszahlen": [
+   {
+    "name": "v",
+    "von": 12,
+    "bis": 30,
+    "schritt": 2
+   },
+   {
+    "name": "t",
+    "von": 10,
+    "bis": 50,
+    "schritt": 5
+   }
+  ],
+  "schwierigkeit": "leicht",
+  "minuten": 8
+ },
+ {
+  "fach": "Physik",
+  "schlagwort1": "Kinematik",
+  "schlagwort2": "Bremsweg",
+  "aufgabe": "Ein Auto fährt mit {=v} m/s und bremst gleichmäßig mit $a = {=a}\\,\\text{m/s}^2$ bis zum Stillstand.\n\n| a) | Wie lange dauert der Bremsvorgang? | 2 P. |\n| b) | Wie lang ist der Bremsweg? | 3 P. |",
+  "loesung": "a) $t = \\frac{v}{a} = \\frac{{=v}}{{=a}}\\,\\text{s} \\approx {=v/a;2}\\,\\text{s}$\nb) $s = \\frac{v^2}{2a} = \\frac{{=v}^2}{2 \\cdot {=a}}\\,\\text{m} \\approx {=v^2/(2*a);1}\\,\\text{m}$",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "t = v/a"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 3,
+    "erwartung": "Bremswegformel oder s = ½ a t²"
+   }
+  ],
+  "punkte": 5,
+  "zufallszahlen": [
+   {
+    "name": "v",
+    "von": 10,
+    "bis": 30,
+    "schritt": 2
+   },
+   {
+    "name": "a",
+    "von": 4,
+    "bis": 8,
+    "schritt": 0.5
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 10
+ },
+ {
+  "fach": "Physik",
+  "schlagwort1": "Elektrizitätslehre",
+  "schlagwort2": "Ohmsches Gesetz",
+  "aufgabe": "An einem Widerstand von {=r} Ω liegt eine Spannung von {=u} V.\nBerechnen Sie die Stromstärke und die elektrische Leistung.",
+  "loesung": "$I = \\frac{U}{R} = \\frac{{=u}\\,\\text{V}}{{=r}\\,\\Omega} \\approx {=u/r;3}\\,\\text{A}$\n$P = U \\cdot I \\approx {=u^2/r;2}\\,\\text{W}$",
+  "punkte": 4,
+  "zufallszahlen": [
+   {
+    "name": "r",
+    "von": 10,
+    "bis": 200,
+    "schritt": 10
+   },
+   {
+    "name": "u",
+    "von": 3,
+    "bis": 24,
+    "schritt": 3
+   }
+  ],
+  "schwierigkeit": "leicht",
+  "minuten": 6,
+  "leerzeilen": 4
+ },
+ {
+  "fach": "Physik",
+  "schlagwort1": "Energie",
+  "schlagwort2": "Lageenergie",
+  "aufgabe": "Ein Körper der Masse {=m} kg wird um {=h} m angehoben ($g = 9,81\\,\\text{m/s}^2$).\nWelche Lageenergie gewinnt er? Mit welcher Geschwindigkeit käme er nach dem freien Fall wieder unten an?",
+  "loesung": "$E = m g h = {=m*9.81*h;1}\\,\\text{J}$\n$v = \\sqrt{2 g h} \\approx {=sqrt(2*9.81*h);2}\\,\\text{m/s}$",
+  "punkte": 5,
+  "zufallszahlen": [
+   {
+    "name": "m",
+    "von": 1,
+    "bis": 10,
+    "schritt": 1
+   },
+   {
+    "name": "h",
+    "von": 2,
+    "bis": 20,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 8,
+  "leerzeilen": 5
+ },
+ {
+  "fach": "Wirtschaft",
+  "schlagwort1": "Kaufvertrag",
+  "schlagwort2": "Zustandekommen eines Kaufvertrags",
+  "aufgabe": "Ein Händler bietet in seinem Schaufenster ein Fahrrad für 499 € an. Frau Berg betritt den Laden und sagt: „Ich nehme das Fahrrad aus dem Fenster.“\n\n| a) | Ist das Schaufensterangebot ein Antrag im rechtlichen Sinn? Begründen Sie. | 2 P. |\n| b) | Ist ein Kaufvertrag zustande gekommen? | 2 P. |\n| c) | Nennen Sie die Pflichten beider Vertragspartner. | 2 P. |",
+  "loesung": "a) Nein, eine Aufforderung zur Abgabe eines Angebots (invitatio ad offerendum).\nb) Erst wenn der Händler Frau Bergs Antrag annimmt: zwei übereinstimmende Willenserklärungen.\nc) Verkäufer: Übergabe und Eigentumsverschaffung, mangelfreie Sache; Käuferin: Zahlung, Abnahme.",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Begriff und Begründung"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 2,
+    "erwartung": "Antrag und Annahme"
+   },
+   {
+    "bezeichnung": "c",
+    "punkte": 2,
+    "erwartung": "Pflichten beider Seiten"
+   }
+  ],
+  "punkte": 6,
+  "schwierigkeit": "mittel",
+  "minuten": 12
+ },
+ {
+  "fach": "Wirtschaft",
+  "schlagwort1": "Finanzmathematik",
+  "schlagwort2": "Zinseszins",
+  "aufgabe": "Ein Betrag von {=k} € wird {=n} Jahre zu {=p} % p. a. angelegt (Zinseszins).\nWie hoch ist das Endkapital?",
+  "loesung": "$K_n = K_0 \\cdot \\left(1 + \\frac{p}{100}\\right)^n = {=k} \\cdot {=1+p/100;4}^{{=n}} \\approx {=k*(1+p/100)^n;2}$ €",
+  "punkte": 4,
+  "zufallszahlen": [
+   {
+    "name": "k",
+    "von": 1000,
+    "bis": 10000,
+    "schritt": 500
+   },
+   {
+    "name": "n",
+    "von": 3,
+    "bis": 10,
+    "schritt": 1
+   },
+   {
+    "name": "p",
+    "von": 1,
+    "bis": 4.5,
+    "schritt": 0.5
+   }
+  ],
+  "schwierigkeit": "leicht",
+  "minuten": 6,
+  "leerzeilen": 4
+ },
+ {
+  "fach": "Wirtschaft",
+  "schlagwort1": "Kostenrechnung",
+  "schlagwort2": "Gewinnschwelle",
+  "aufgabe": "Ein Betrieb hat Fixkosten von {=f} € im Monat. Ein Stück kostet in der Herstellung {=kv} € und wird für {=pr} € verkauft.\n\n| a) | Berechnen Sie den Deckungsbeitrag je Stück. | 2 P. |\n| b) | Ab welcher Menge macht der Betrieb Gewinn? | 3 P. |\n| c) | Wie hoch ist der Gewinn bei 2000 Stück? | 2 P. |",
+  "loesung": "a) $db = {=pr} - {=kv} = {=pr-kv}$ €\nb) $x = \\frac{K_f}{db} = \\frac{{=f}}{{=pr-kv}} \\approx {=f/(pr-kv);1}$; Gewinn ab {=ceil(f/(pr-kv)+0.000001)} Stück\nc) $G = 2000 \\cdot {=pr-kv} - {=f} = {=2000*(pr-kv)-f}$ €",
+  "teilaufgaben": [
+   {
+    "bezeichnung": "a",
+    "punkte": 2,
+    "erwartung": "Preis minus variable Kosten"
+   },
+   {
+    "bezeichnung": "b",
+    "punkte": 3,
+    "erwartung": "Fixkosten durch Deckungsbeitrag, aufgerundet"
+   },
+   {
+    "bezeichnung": "c",
+    "punkte": 2,
+    "erwartung": "Gesamtdeckungsbeitrag minus Fixkosten"
+   }
+  ],
+  "punkte": 7,
+  "zufallszahlen": [
+   {
+    "name": "f",
+    "von": 5000,
+    "bis": 20000,
+    "schritt": 1000
+   },
+   {
+    "name": "kv",
+    "von": 8,
+    "bis": 15,
+    "schritt": 1
+   },
+   {
+    "name": "pr",
+    "von": 20,
+    "bis": 30,
+    "schritt": 1
+   }
+  ],
+  "schwierigkeit": "mittel",
+  "minuten": 12
+ },
+ {
+  "fach": "Deutsch",
+  "schlagwort1": "Rechtschreibung",
+  "schlagwort2": "Kommasetzung",
+  "aufgabe": "Setzen Sie die fehlenden Kommas.\n\n• Als es zu regnen begann gingen wir nach Hause.\n• Sie hofft die Prüfung zu bestehen.\n• Der Lehrer der neu an der Schule ist unterrichtet Mathematik.",
+  "loesung": "• Als es zu regnen begann**,** gingen wir nach Hause. (Nebensatz)\n• Sie hofft**,** die Prüfung zu bestehen. (Infinitivgruppe, Komma empfohlen)\n• Der Lehrer**,** der neu an der Schule ist**,** unterrichtet Mathematik. (eingeschobener Relativsatz)",
+  "punkte": 4,
+  "schwierigkeit": "leicht",
+  "minuten": 5
+ },
+ {
+  "fach": "Englisch",
+  "schlagwort1": "Grammar",
+  "schlagwort2": "Simple past",
+  "aufgabe": "Put the verbs into the simple past.\n\n| 1. | Yesterday we (go) ______ to the cinema. |\n| 2. | She (buy) ______ a new phone last week. |\n| 3. | They (not / see) ______ the film. |\n| 4. | (you / finish) ______ your homework? |",
+  "loesung": "1. went · 2. bought · 3. did not see (didn't see) · 4. Did you finish",
+  "punkte": 4,
+  "schwierigkeit": "leicht",
+  "minuten": 5
+ }
+]

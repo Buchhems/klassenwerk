@@ -1,0 +1,13 @@
+Klassenwerk für macOS (Apple Silicon und Intel, macOS 11 oder neuer)
+====================================================================
+
+1. Zip-Datei öffnen und Klassenwerk.app in den Ordner „Programme“ ziehen.
+2. Beim ersten Start: Rechtsklick auf Klassenwerk → „Öffnen“ → „Öffnen“.
+   (Die App ist nicht bei Apple notariell beglaubigt; ohne diesen Schritt meldet macOS
+   „kann nicht geöffnet werden“. Alternativ im Terminal:
+   xattr -dr com.apple.quarantine /Applications/Klassenwerk.app)
+
+Ihre Daten liegen in ~/Library/Application Support/Klassenwerk/datenbank.json.
+
+KI-Assistent (MCP): Befehl /Applications/Klassenwerk.app/Contents/MacOS/Klassenwerk,
+Argument --mcp; Einrichtung auch in Klassenwerk unter Einstellungen → KI-Assistent.

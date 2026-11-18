@@ -1,0 +1,11 @@
+# Zeilenenden: Textdateien normalisieren; Shell-Skripte immer mit LF (sonst laufen sie unter Linux/macOS nicht)
+* text=auto
+*.sh text eol=lf
+*.desktop text eol=lf
+# Binärdateien
+*.png binary
+*.ico binary
+*.res binary
+*.obj binary
+*.iss text eol=crlf
+*.ps1 text eol=crlf

@@ -1,0 +1,119 @@
+# Prüft und baut Klassenwerk für Windows, macOS und Linux.
+# Start: auf GitHub unter "Actions" → "Klassenwerk bauen" → "Run workflow",
+# oder automatisch bei einem Versions-Tag (z. B. v1.0.1). Die fertigen Pakete
+# liegen danach unter "Artifacts", bei Tags zusätzlich als Release.
+name: Klassenwerk bauen
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  pruefen:
+    name: Formatierung, Clippy, Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v5
+      # feste Version für die Prüfung: neue Rust-Versionen bringen neue Clippy-Regeln mit,
+      # die sonst ein Release blockieren. Bei Gelegenheit hochsetzen und Hinweise beheben.
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.100.0"
+          components: rustfmt, clippy
+      - name: Formatierung (cargo fmt)
+        working-directory: app
+        run: cargo fmt --check
+      - name: Clippy (Warnungen sind Fehler)
+        working-directory: app
+        run: cargo clippy --all-targets -- -D warnings
+      - name: Tests
+        working-directory: app
+        run: cargo test
+
+  linux:
+    needs: pruefen
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Lizenzliste vervollständigen
+        run: (cd app && cargo fetch) && python3 packaging/third_party_licenses.py
+      - name: Bauen und packen
+        run: sh packaging/linux/build-linux.sh
+      - uses: actions/upload-artifact@v6
+        with:
+          name: Klassenwerk-linux
+          path: dist/*.tar.gz
+
+  macos:
+    needs: pruefen
+    if: github.event_name != 'pull_request'
+    # macos-14 ist seit 2.11.2026 abgeschaltet; feste Version statt macos-latest
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - name: Lizenzliste vervollständigen
+        run: (cd app && cargo fetch) && python3 packaging/third_party_licenses.py
+      - name: Bauen und packen
+        run: sh packaging/macos/build-macos.sh
+      - uses: actions/upload-artifact@v6
+        with:
+          name: Klassenwerk-macos
+          path: dist/*.zip
+
+  windows:
+    needs: pruefen
+    if: github.event_name != 'pull_request'
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Lizenzliste vervollständigen
+        shell: pwsh
+        run: |
+          Push-Location app; cargo fetch; Pop-Location
+          python packaging/third_party_licenses.py
+      - name: Inno Setup installieren
+        run: choco install innosetup -y --no-progress
+      - name: Bauen, Zip und Installer
+        shell: pwsh
+        run: ./packaging/windows/build-windows.ps1
+      - uses: actions/upload-artifact@v6
+        with:
+          name: Klassenwerk-windows
+          path: |
+            dist/*.zip
+            dist/*.exe
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [linux, macos, windows]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v5
+      # the section of this version from CHANGELOG.md becomes the release description
+      # (Klassenwerk shows it in the update dialog)
+      - name: Änderungen dieser Version
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" 'index($0, "## " v " ") == 1 {f = 1; next} /^## / {f = 0} f' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Klassenwerk $v" > notes.md
+          cat notes.md
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v3
+        with:
+          name: Klassenwerk ${{ github.ref_name }}
+          body_path: notes.md
+          files: dist/*
